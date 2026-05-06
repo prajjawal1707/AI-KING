@@ -24,11 +24,14 @@ export default async function handler(req, res) {
     .insert([{ email }]);
 
   if (error) {
-    // Code 23505 means the email already exists in the database
     if (error.code === '23505') {
       return res.status(200).json({ message: 'Email already on the waitlist!' });
     }
-    return res.status(500).json({ error: 'Failed to join waitlist.' });
+    // TEMPORARY DEBUGGING: This will send the exact Supabase error to your screen
+    console.error("Supabase Error details:", error);
+    return res.status(500).json({ 
+      error: `Supabase Error: ${error.message || 'Check Vercel Logs'} (Code: ${error.code || 'Unknown'})` 
+    });
   }
 
   return res.status(200).json({ message: 'Success' });
